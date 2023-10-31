@@ -10,30 +10,33 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 
+
 class OrderShipped extends Mailable
 {
     use Queueable, SerializesModels;
 
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
-    public function __construct($content)
+    public $subject;
+    public $content;
+    public $customHeaders;
+
+    public function __construct($subject, $content, $customHeaders)
     {
+        $this->subject = $subject;
         $this->content = $content;
+        $this->customHeaders = $customHeaders;
     }
 
-
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build()
     {
-        return $this->markdown('emails.orders.shipped')
-                        ->with('content',$this->content);
+        return $this
+            ->subject($this->subject)
+            ->view('emails.orders.shipped')
+            ->with([
+                'emailMessage' => $this->content,
+            ])
+            ->withSwiftMessage(function ($content) {
+                $content->getHeaders()->addTextHeader('X-Custom-Header', $this->customHeaders);
+            });
     }
 }
