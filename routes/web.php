@@ -18,4 +18,4 @@ Route::get('/', function () {
 });
 
 // Route::get('sendmail', 'SendMailController@sendMail');
-Route::post('sendmail', 'SendMailController@sendMail');
+Route::get('sendmail', 'SendMailController@sendMail');

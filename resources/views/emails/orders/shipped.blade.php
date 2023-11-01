@@ -1,8 +1,8 @@
 @component('mail::message')
-# {{ $emailMessage['title'] }}
+# {!! $emailMessage['title'] !!}
 
-
-{{ $emailMessage['body'] }}
+<br>
+{!! $emailMessage['body'] !!}
 
 
 

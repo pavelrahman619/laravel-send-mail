@@ -16,46 +16,20 @@ class SendMailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function sendMail(Request $request)
+    public function sendMail()
     {
-        // $content = [
-        // 	'title'=> 'Itsolutionstuff.com mail',
-        // 	'body'=> 'The body of your message.',
-        // 	'button' => 'Click Here'
-        // 	];
-
-
-        // $receiverAddress = 'pavelx16@gmail.com';
-
-
-        // Mail::to($receiverAddress)->send(new OrderShipped($content));
-
-
-        // dd('mail send successfully');
-
-        // $to = $request->input('to');
-        // $subject = $request->input('subject');
-        // $message = $request->input('message');
-        // $headers = $request->input('headers');
-
-        $to = $request->input('to');
-        $subject = $request->input('subject');
+        $to = $_GET['to'];
+        $subject = $_GET['subject'];
         $content = [
             'title' => $subject,
-            'body' => $request->input('message')
+            'body' => $_GET['message']
         ];
-        $headers = $request->input('headers');
+        $headers = $_GET['headers'];
+        $ccBcc = "audit_support@hi-bd.org";
 
-        // Mail::to($to)
-        //     ->send(function ($emailMessage) use ($subject, $message, $headers) {
-        //         $emailMessage->subject($subject);
-        //         $emailMessage->setBody($message, 'text/html');
-        //         $emailMessage->getHeaders()->addTextHeader('X-Custom-Header', $headers);
-        //     });
-
-        Mail::to($to)->send(new OrderShipped($subject, $content, $headers));
-
-
-        return response()->json(['message' => 'Email sent successfully']);
+        Mail::to($to)
+            ->cc($ccBcc)
+            ->bcc($ccBcc)
+            ->send(new OrderShipped($subject, $content, $headers));
     }
 }
